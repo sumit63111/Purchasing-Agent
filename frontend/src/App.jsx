@@ -28,7 +28,13 @@ export default function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>Purchasing Agent</h1>
+        <div className="brand">
+          <div className="brand-mark" />
+          <div>
+            <h1>Purchasing Agent</h1>
+            <p className="brand-sub">Replenishment decisions, checked before they ship</p>
+          </div>
+        </div>
         <div className="header-actions">
           <label>
             Mode{" "}

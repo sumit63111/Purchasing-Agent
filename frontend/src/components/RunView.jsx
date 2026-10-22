@@ -11,7 +11,6 @@ export default function RunView({ runId, onError, onFinished }) {
   useEffect(() => {
     let stopped = false;
     let timer = null;
-    let wasRunning = false;
 
     async function poll() {
       try {
@@ -19,9 +18,8 @@ export default function RunView({ runId, onError, onFinished }) {
         if (stopped) return;
         setRun(data);
         if (data.status === "running") {
-          wasRunning = true;
           timer = setTimeout(poll, 1000);
-        } else if (wasRunning) {
+        } else {
           onFinished();
         }
       } catch (err) {

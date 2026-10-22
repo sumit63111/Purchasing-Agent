@@ -18,25 +18,49 @@ action is checked twice: before it runs and after it lands.
 - **Human in the loop:** an approval queue for big or expensive orders, cancellations and escalations.
 - **Evaluation:** 10 test cases covering all four scenarios in the brief, graded automatically.
 
+## Demo
+
+![Demo: the agent working three scenarios, an approval and the evaluation scorecard](docs/demo/demo.gif)
+
+The GIF above plays on the repo page and runs at 1.6x speed. The full-quality video is
+[docs/demo/demo.mp4](docs/demo/demo.mp4). It was recorded against the running app in rules mode,
+with captions explaining each step:
+
+1. **Recommendation review (REC-101):** 800 recommended, the real need is about 160, and 800 breaks
+   budget and storage. The agent orders 168 and verification passes.
+2. **Supplier shortfall (SHORT-201):** only 250 of 500 are confirmed. The agent re-sources the gap,
+   the next supplier also short-ships, and it sources again. The pricier order waits for approval.
+3. **Bad data (REC-104):** zero sales for 5 days with 420 units "on hand". The agent refuses to buy
+   and escalates.
+4. **Human in the loop:** an order is approved from the queue and goes to the supplier.
+5. **Purchase orders** created by the agent, and the **evaluation scorecard** (10/10).
+
+| Decision and verification | Live agent trace |
+|---|---|
+| ![Decision card with verification passed](docs/demo/decision.png) | ![Tool-by-tool trace of a run](docs/demo/trace.png) |
+| **Approval queue** | **Evaluation scorecard** |
+| ![Escalation and an order waiting for approval](docs/demo/approvals.png) | ![10 of 10 cases passing](docs/demo/evaluation.png) |
+
 ---
 
 ## Contents
 
-1. [Quick start](#quick-start)
-2. [Configuration](#configuration)
-3. [Choosing a model](#choosing-a-model)
-4. [Using the app](#using-the-app)
-5. [Test scenarios](#test-scenarios)
-6. [Architecture](#architecture)
-7. [Approach](#approach)
-8. [Agent tools](#agent-tools)
-9. [Human approval policy](#human-approval-policy)
-10. [Validation and the feedback loop](#validation-and-the-feedback-loop)
-11. [Evaluation](#evaluation)
-12. [API reference](#api-reference)
-13. [Mock data](#mock-data)
-14. [Troubleshooting](#troubleshooting)
-15. [Limitations and next steps](#limitations-and-next-steps)
+1. [Demo](#demo)
+2. [Quick start](#quick-start)
+3. [Configuration](#configuration)
+4. [Choosing a model](#choosing-a-model)
+5. [Using the app](#using-the-app)
+6. [Test scenarios](#test-scenarios)
+7. [Architecture](#architecture)
+8. [Approach](#approach)
+9. [Agent tools](#agent-tools)
+10. [Human approval policy](#human-approval-policy)
+11. [Validation and the feedback loop](#validation-and-the-feedback-loop)
+12. [Evaluation](#evaluation)
+13. [API reference](#api-reference)
+14. [Mock data](#mock-data)
+15. [Troubleshooting](#troubleshooting)
+16. [Limitations and next steps](#limitations-and-next-steps)
 
 ---
 
@@ -87,7 +111,18 @@ npm run dev
 
 Open http://localhost:5173. The Vite dev server forwards `/api` to the backend on port 8000.
 
-### 4. Tests and evaluation
+### 4. Check it works
+
+1. `http://localhost:8000/health` returns `"status": "ok"`, with the agent mode, provider and model.
+2. Open http://localhost:5173 and set **Mode** to `rules`. This needs no API key or credit.
+3. Click **Review system recommendation: 800 x Sunflower Oil 1L**, then **Run agent (rules)**.
+   The trace fills in and the decision card shows **modify, 168 units**, with verification passed.
+4. Run **Supplier shortfall on PO-2001**, then open **Approvals** and approve the Metro Mayoreo
+   order.
+5. Switch **Mode** to `llm` (or `auto` with a key in `.env`) and run a case to try the LLM agent.
+6. **Reset demo data** puts everything back to the start.
+
+### 5. Tests and evaluation
 
 ```bash
 cd backend
@@ -200,23 +235,58 @@ answer is wrong.
 
 ## Architecture
 
-Diagrams (system and feedback loop sequence) are in [docs/architecture.md](docs/architecture.md).
+### System
 
+```mermaid
+flowchart LR
+    UI[React UI<br/>cases, live trace,<br/>approvals, evals] -->|REST| API[FastAPI<br/>app/main.py]
+    API --> RUN[Runner<br/>agent/runner.py]
+    RUN --> LLM[LLM agent<br/>OpenRouter or Gemini]
+    RUN --> RULES[Rule agent<br/>agent/rule_agent.py]
+    LLM --> TOOLS[Tools<br/>agent/tools.py]
+    RULES --> TOOLS
+    TOOLS --> PLAN[planning.py<br/>demand, projection, need]
+    TOOLS --> CHECKS[checks.py<br/>validate_order<br/>verify_outcome]
+    TOOLS --> ORDERS[orders.py<br/>POs, approvals]
+    ORDERS --> SUP[Mock supplier<br/>confirms real stock]
+    PLAN --> DB[(SQLite<br/>mock ERP)]
+    ORDERS --> DB
+    CHECKS --> DB
+    API --> APPROVALS[Approval queue] --> ORDERS
 ```
-React UI  --REST-->  FastAPI (main.py)
-                         |
-                      Runner (runner.py)  -- stores every step, escalates failed runs
-                       /            \
-          LLM agent (llm_agent.py)   Rule agent (rule_agent.py)
-                       \            /
-                    Tools (tools.py)   <- the only way an agent touches data
-                   /        |        \
-         planning.py    checks.py    orders.py --> mock supplier
-         demand, stock  validate,    POs, budget,
-         projection     verify       approvals
-                   \        |        /
-                    SQLite mock ERP (db.py)
+
+The agents never touch the database directly. Every read and every action goes through
+`tools.py`, which records each call in the run trace. Actions go through `orders.py`, and that
+re-validates them and applies the approval policy whatever the agent asked for.
+
+### Feedback loop
+
+```mermaid
+sequenceDiagram
+    participant A as Agent
+    participant V as check_order
+    participant S as Supplier (mock)
+    participant O as verify_outcome
+    participant H as Buyer
+
+    A->>V: check_order(supplier, qty)
+    V-->>A: errors / warnings / max_feasible_qty
+    A->>S: create_purchase_order
+    alt needs approval
+        S-->>H: queued in approval queue
+        H->>S: approve
+        S-->>H: confirmation (may be partial -> new AUTO case)
+    else auto
+        S-->>A: confirmed / partially confirmed / rejected
+    end
+    A->>A: partial? accept it and source the rest
+    A->>O: submit_decision
+    O-->>A: issues (coverage, budget, storage, unresolved partials, decision mismatch)
+    A->>A: fix and resubmit (max 3)
+    O-->>H: still failing -> run marked needs_review + escalation
 ```
+
+### Project layout
 
 ```
 backend/

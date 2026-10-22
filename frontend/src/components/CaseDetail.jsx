@@ -116,7 +116,9 @@ export default function CaseDetail({ caseId, mode, onError, onCaseChanged }) {
         )}
 
         <h3>Daily sales, last 28 days</h3>
-        <SalesChart units={demand.daily_units_28d} forecast={demand.forecast_daily} />
+        <div className="chart-box">
+          <SalesChart units={demand.daily_units_28d} forecast={demand.forecast_daily} />
+        </div>
 
         {caseInfo.recommended_qty != null && (
           <p>

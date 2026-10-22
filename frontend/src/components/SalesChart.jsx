@@ -12,18 +12,28 @@ export default function SalesChart({ units, forecast }) {
 
   return (
     <svg className="chart" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-label="Daily sales for the last 28 days">
-      <line x1={PADDING} y1={baseline} x2={WIDTH - PADDING} y2={baseline} stroke="#cbd5e1" />
-      <text x={PADDING - 4} y={PADDING + 4} textAnchor="end" className="chart-label">{maxValue}</text>
-      <text x={PADDING - 4} y={baseline} textAnchor="end" className="chart-label">0</text>
+      <defs>
+        <linearGradient id="sales-bar" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#c4b5fd" />
+          <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.55" />
+        </linearGradient>
+      </defs>
+
+      <line x1={PADDING} y1={PADDING} x2={WIDTH - PADDING} y2={PADDING} stroke="rgba(255,255,255,0.08)" />
+      <line x1={PADDING} y1={toY(maxValue / 2)} x2={WIDTH - PADDING} y2={toY(maxValue / 2)} stroke="rgba(255,255,255,0.08)" />
+      <line x1={PADDING} y1={baseline} x2={WIDTH - PADDING} y2={baseline} stroke="rgba(255,255,255,0.28)" />
+      <text x={PADDING - 6} y={PADDING + 4} textAnchor="end" className="chart-label">{maxValue}</text>
+      <text x={PADDING - 6} y={baseline + 4} textAnchor="end" className="chart-label">0</text>
 
       {units.map((value, index) => (
         <rect
           key={index}
-          x={PADDING + index * slotWidth + 1}
+          x={PADDING + index * slotWidth + 1.5}
           y={toY(value)}
-          width={slotWidth - 2}
+          width={slotWidth - 3}
           height={baseline - toY(value)}
-          fill="#93c5fd"
+          rx="2"
+          fill="url(#sales-bar)"
         >
           <title>{`Day ${index + 1}: ${value} units`}</title>
         </rect>
@@ -36,11 +46,11 @@ export default function SalesChart({ units, forecast }) {
             y1={toY(forecast)}
             x2={WIDTH - PADDING}
             y2={toY(forecast)}
-            stroke="#d97706"
+            stroke="#fbbf24"
             strokeWidth="2"
-            strokeDasharray="5 4"
+            strokeDasharray="6 4"
           />
-          <text x={WIDTH - PADDING} y={toY(forecast) - 5} textAnchor="end" className="chart-label">
+          <text x={WIDTH - PADDING} y={toY(forecast) - 6} textAnchor="end" className="chart-forecast">
             forecast {forecast}/day
           </text>
         </>

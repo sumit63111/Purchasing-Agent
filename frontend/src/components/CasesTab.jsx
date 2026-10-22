@@ -37,7 +37,7 @@ export default function CasesTab({ mode, onError }) {
         {selectedCaseId ? (
           <CaseDetail key={selectedCaseId} caseId={selectedCaseId} mode={mode} onError={onError} onCaseChanged={loadCases} />
         ) : (
-          <div className="card muted">Select a case to see its details.</div>
+          <div className="card muted empty-state">Select a case to see its details.</div>
         )}
       </section>
     </div>
