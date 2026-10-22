@@ -1,0 +1,42 @@
+{
+  "REC-101": {
+    "why": "800 is ~4x the real need and breaks both budget and storage. Need is ~160-170 units.",
+    "decision": ["modify"], "quantity": [120, 264], "orders": true
+  },
+  "REC-102": {
+    "why": "Recommendation matches the computed need. Order is above the auto-approve limit, so it should wait for approval.",
+    "decision": ["accept", "modify"], "quantity": [440, 540], "orders": true
+  },
+  "REC-103": {
+    "why": "On hand + open PO already cover ~48 days. Buying more also breaks storage.",
+    "decision": ["reject"], "quantity": [0, 0], "orders": false
+  },
+  "REC-104": {
+    "why": "Five zero-sales days with 420 units 'on hand' and a 34-day-old count. Data cannot be trusted.",
+    "decision": ["investigate", "escalate"], "quantity": [0, 0], "orders": false, "escalate": true
+  },
+  "SHORT-201": {
+    "why": "250 confirmed is not enough (stockout ~day 9). Rest must come from alternates; the first alternate also short-ships.",
+    "decision": ["modify"], "quantity": [150, 300], "orders": true, "recovery": true
+  },
+  "SHORT-202": {
+    "why": "Stock + 250 confirmed covers 40+ days. Accept the partial, no new order.",
+    "decision": ["accept"], "quantity": [0, 0], "orders": false, "recovery": true
+  },
+  "DEMAND-301": {
+    "why": "Sustained jump from ~30 to ~71/day. Stock runs out on day 4, before the primary can deliver, so a fast supplier is needed too.",
+    "decision": ["modify"], "quantity": [400, 800], "orders": true, "demand": [60, 90]
+  },
+  "DEMAND-302": {
+    "why": "The 'spike' is one bulk order (420 units, 22 orders). Real demand is still ~40/day and covered.",
+    "decision": ["accept", "reject"], "quantity": [0, 0], "orders": false, "demand": [35, 50]
+  },
+  "CONSTRAINT-401": {
+    "why": "Need ~600 but budget allows only 384. Buy what fits, escalate the rest.",
+    "decision": ["modify"], "quantity": [300, 390], "orders": true, "escalate": true
+  },
+  "CONSTRAINT-402": {
+    "why": "Primary MOQ (300) does not fit the budget. Alternate supplier with MOQ 48 does.",
+    "decision": ["modify"], "quantity": [72, 156], "orders": true, "supplier": "SUP-14"
+  }
+}

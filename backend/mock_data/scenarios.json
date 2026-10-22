@@ -1,0 +1,254 @@
+{
+  "nodes": [
+    {"node_id": "BOG-01", "name": "Bogota Norte Dark Store", "city": "Bogota", "review_period_days": 7},
+    {"node_id": "MEX-02", "name": "CDMX Roma Fulfillment Hub", "city": "Mexico City", "review_period_days": 7},
+    {"node_id": "SAO-03", "name": "Sao Paulo Pinheiros Hub", "city": "Sao Paulo", "review_period_days": 7}
+  ],
+
+  "suppliers": [
+    {"supplier_id": "SUP-01", "name": "Aceites del Valle", "status": "active", "on_time_rate": 0.96, "fill_rate": 0.97},
+    {"supplier_id": "SUP-02", "name": "Distribuidora Andina", "status": "active", "on_time_rate": 0.92, "fill_rate": 0.94},
+    {"supplier_id": "SUP-03", "name": "Granos La Cosecha", "status": "active", "on_time_rate": 0.95, "fill_rate": 0.96},
+    {"supplier_id": "SUP-04", "name": "Molinos Atlas", "status": "active", "on_time_rate": 0.93, "fill_rate": 0.88},
+    {"supplier_id": "SUP-05", "name": "Golden Harvest Traders", "status": "active", "on_time_rate": 0.81, "fill_rate": 0.78},
+    {"supplier_id": "SUP-06", "name": "Metro Mayoreo", "status": "active", "on_time_rate": 0.97, "fill_rate": 0.97},
+    {"supplier_id": "SUP-07", "name": "Papel Brasil Ltda", "status": "active", "on_time_rate": 0.90, "fill_rate": 0.91},
+    {"supplier_id": "SUP-08", "name": "HydraLife Bebidas", "status": "active", "on_time_rate": 0.94, "fill_rate": 0.95},
+    {"supplier_id": "SUP-09", "name": "QuickServe Distribuciones", "status": "active", "on_time_rate": 0.98, "fill_rate": 0.96},
+    {"supplier_id": "SUP-10", "name": "Desechables Express", "status": "active", "on_time_rate": 0.95, "fill_rate": 0.95},
+    {"supplier_id": "SUP-11", "name": "BabyCare Atacado", "status": "active", "on_time_rate": 0.94, "fill_rate": 0.95},
+    {"supplier_id": "SUP-12", "name": "Infantil Distribuidora", "status": "active", "on_time_rate": 0.92, "fill_rate": 0.93},
+    {"supplier_id": "SUP-13", "name": "Miel de los Altos", "status": "active", "on_time_rate": 0.95, "fill_rate": 0.96},
+    {"supplier_id": "SUP-14", "name": "Abarrotes Selectos", "status": "active", "on_time_rate": 0.93, "fill_rate": 0.94},
+    {"supplier_id": "SUP-15", "name": "Cafe Serra Azul", "status": "active", "on_time_rate": 0.96, "fill_rate": 0.97},
+    {"supplier_id": "SUP-16", "name": "Lacteos Sabana", "status": "active", "on_time_rate": 0.97, "fill_rate": 0.98}
+  ],
+
+  "scenarios": [
+    {
+      "case": {
+        "case_id": "REC-101",
+        "case_type": "recommendation_review",
+        "title": "Review system recommendation: 800 x Sunflower Oil 1L",
+        "description": "The replenishment engine recommends purchasing 800 units of Sunflower Oil 1L for BOG-01 from Aceites del Valle. Review the recommendation and decide whether to accept, modify, reject or investigate it.",
+        "recommended_qty": 800,
+        "recommended_supplier_id": "SUP-01"
+      },
+      "node_id": "BOG-01",
+      "product": {"sku": "OIL-1L", "name": "Sunflower Oil 1L", "category": "Pantry", "shelf_life_days": 365, "safety_days": 4, "primary_supplier_id": "SUP-01"},
+      "supplier_items": [
+        {"supplier_id": "SUP-01", "unit_cost": 6.50, "moq": 120, "case_pack": 12, "lead_time_days": 5, "available_qty": 2000},
+        {"supplier_id": "SUP-02", "unit_cost": 7.40, "moq": 60, "case_pack": 12, "lead_time_days": 3, "available_qty": 1000}
+      ],
+      "inventory": {"on_hand": 300, "reserved": 20, "last_counted_days_ago": 3},
+      "forecast": 41,
+      "sales": {"base": 40, "noise": 3, "units_per_order": 1.6},
+      "budget": {"limit": 12000, "committed": 8000},
+      "storage": {"capacity": 1500, "other_units": 700},
+      "open_pos": [
+        {"po_id": "PO-1001", "supplier_id": "SUP-01", "quantity": 204, "confirmed_qty": 204, "status": "confirmed", "arrives_in_days": 2}
+      ]
+    },
+    {
+      "case": {
+        "case_id": "REC-102",
+        "case_type": "recommendation_review",
+        "title": "Review system recommendation: 480 x White Rice 5kg",
+        "description": "The replenishment engine recommends purchasing 480 units of White Rice 5kg for MEX-02 from Granos La Cosecha. Review the recommendation and decide whether to accept, modify, reject or investigate it.",
+        "recommended_qty": 480,
+        "recommended_supplier_id": "SUP-03"
+      },
+      "node_id": "MEX-02",
+      "product": {"sku": "RICE-5KG", "name": "White Rice 5kg", "category": "Grains", "shelf_life_days": 540, "safety_days": 3, "primary_supplier_id": "SUP-03"},
+      "supplier_items": [
+        {"supplier_id": "SUP-03", "unit_cost": 11.00, "moq": 100, "case_pack": 20, "lead_time_days": 4, "available_qty": 3000},
+        {"supplier_id": "SUP-06", "unit_cost": 12.30, "moq": 100, "case_pack": 20, "lead_time_days": 5, "available_qty": 3000}
+      ],
+      "inventory": {"on_hand": 380, "reserved": 20, "last_counted_days_ago": 2},
+      "forecast": 60,
+      "sales": {"base": 60, "noise": 4, "units_per_order": 1.2},
+      "budget": {"limit": 20000, "committed": 9000},
+      "storage": {"capacity": 2000, "other_units": 900},
+      "open_pos": []
+    },
+    {
+      "case": {
+        "case_id": "REC-103",
+        "case_type": "recommendation_review",
+        "title": "Review system recommendation: 600 x Instant Coffee 200g",
+        "description": "The replenishment engine recommends purchasing 600 units of Instant Coffee 200g for SAO-03 from Cafe Serra Azul. Review the recommendation and decide whether to accept, modify, reject or investigate it.",
+        "recommended_qty": 600,
+        "recommended_supplier_id": "SUP-15"
+      },
+      "node_id": "SAO-03",
+      "product": {"sku": "COFFEE-200G", "name": "Instant Coffee 200g", "category": "Beverages", "shelf_life_days": 365, "safety_days": 3, "primary_supplier_id": "SUP-15"},
+      "supplier_items": [
+        {"supplier_id": "SUP-15", "unit_cost": 4.80, "moq": 100, "case_pack": 24, "lead_time_days": 6, "available_qty": 5000}
+      ],
+      "inventory": {"on_hand": 900, "reserved": 0, "last_counted_days_ago": 5},
+      "forecast": 26,
+      "sales": {"base": 25, "noise": 3, "units_per_order": 1.1},
+      "budget": {"limit": 10000, "committed": 2500},
+      "storage": {"capacity": 1500, "other_units": 200},
+      "open_pos": [
+        {"po_id": "PO-1031", "supplier_id": "SUP-15", "quantity": 288, "confirmed_qty": 288, "status": "confirmed", "arrives_in_days": 3}
+      ]
+    },
+    {
+      "case": {
+        "case_id": "REC-104",
+        "case_type": "recommendation_review",
+        "title": "Review system recommendation: 700 x Greek Yogurt 400g",
+        "description": "The replenishment engine recommends purchasing 700 units of Greek Yogurt 400g for BOG-01 from Lacteos Sabana. Review the recommendation and decide whether to accept, modify, reject or investigate it.",
+        "recommended_qty": 700,
+        "recommended_supplier_id": "SUP-16"
+      },
+      "node_id": "BOG-01",
+      "product": {"sku": "YOGURT-400G", "name": "Greek Yogurt 400g", "category": "Dairy", "shelf_life_days": 21, "safety_days": 2, "primary_supplier_id": "SUP-16"},
+      "supplier_items": [
+        {"supplier_id": "SUP-16", "unit_cost": 2.10, "moq": 120, "case_pack": 12, "lead_time_days": 2, "available_qty": 3000}
+      ],
+      "inventory": {"on_hand": 420, "reserved": 0, "last_counted_days_ago": 34},
+      "forecast": 50,
+      "sales": {"base": 50, "noise": 3, "units_per_order": 1.4, "recent": [51, 49, 0, 0, 0, 0, 0]},
+      "budget": {"limit": 6000, "committed": 1200},
+      "storage": {"capacity": 900, "other_units": 250},
+      "open_pos": []
+    },
+    {
+      "case": {
+        "case_id": "SHORT-201",
+        "case_type": "supplier_shortfall",
+        "title": "Supplier shortfall on PO-2001: 250 of 500 x Wheat Flour 10kg",
+        "description": "Molinos Atlas has informed us that PO-2001 (500 units of Wheat Flour 10kg for MEX-02) can only be fulfilled for 250 units. Decide what should happen next.",
+        "ref_po_id": "PO-2001"
+      },
+      "node_id": "MEX-02",
+      "product": {"sku": "FLOUR-10KG", "name": "Wheat Flour 10kg", "category": "Baking", "shelf_life_days": 240, "safety_days": 3, "primary_supplier_id": "SUP-04"},
+      "supplier_items": [
+        {"supplier_id": "SUP-04", "unit_cost": 8.00, "moq": 100, "case_pack": 10, "lead_time_days": 3, "available_qty": 0},
+        {"supplier_id": "SUP-05", "unit_cost": 8.40, "moq": 50, "case_pack": 10, "lead_time_days": 4, "available_qty": 100},
+        {"supplier_id": "SUP-06", "unit_cost": 9.20, "moq": 100, "case_pack": 10, "lead_time_days": 5, "available_qty": 1000}
+      ],
+      "inventory": {"on_hand": 180, "reserved": 0, "last_counted_days_ago": 4},
+      "forecast": 50,
+      "sales": {"base": 50, "noise": 3, "units_per_order": 1.3},
+      "budget": {"limit": 15000, "committed": 4000},
+      "storage": {"capacity": 1500, "other_units": 600},
+      "open_pos": [
+        {"po_id": "PO-2001", "supplier_id": "SUP-04", "quantity": 500, "confirmed_qty": 250, "status": "partially_confirmed", "arrives_in_days": 3}
+      ]
+    },
+    {
+      "case": {
+        "case_id": "SHORT-202",
+        "case_type": "supplier_shortfall",
+        "title": "Supplier shortfall on PO-2002: 250 of 500 x Toilet Paper 12 rolls",
+        "description": "Papel Brasil has informed us that PO-2002 (500 units of Toilet Paper 12 rolls for SAO-03) can only be fulfilled for 250 units. Decide what should happen next.",
+        "ref_po_id": "PO-2002"
+      },
+      "node_id": "SAO-03",
+      "product": {"sku": "TISSUE-12R", "name": "Toilet Paper 12 rolls", "category": "Household", "shelf_life_days": 1095, "safety_days": 3, "primary_supplier_id": "SUP-07"},
+      "supplier_items": [
+        {"supplier_id": "SUP-07", "unit_cost": 5.20, "moq": 100, "case_pack": 10, "lead_time_days": 4, "available_qty": 0}
+      ],
+      "inventory": {"on_hand": 600, "reserved": 0, "last_counted_days_ago": 6},
+      "forecast": 20,
+      "sales": {"base": 20, "noise": 2, "units_per_order": 1.1},
+      "budget": {"limit": 8000, "committed": 2600},
+      "storage": {"capacity": 2500, "other_units": 1200},
+      "open_pos": [
+        {"po_id": "PO-2002", "supplier_id": "SUP-07", "quantity": 500, "confirmed_qty": 250, "status": "partially_confirmed", "arrives_in_days": 4}
+      ]
+    },
+    {
+      "case": {
+        "case_id": "DEMAND-301",
+        "case_type": "demand_change",
+        "title": "Demand spike on Electrolyte Drink 500ml",
+        "description": "Electrolyte Drink 500ml at BOG-01 was forecast at normal demand, but sales over the last week have been much higher. PO-3001 is already open. Check whether the current purchasing plan still covers demand and change it if needed.",
+        "ref_po_id": "PO-3001"
+      },
+      "node_id": "BOG-01",
+      "product": {"sku": "ELECTRO-500ML", "name": "Electrolyte Drink 500ml", "category": "Beverages", "shelf_life_days": 270, "safety_days": 3, "primary_supplier_id": "SUP-08"},
+      "supplier_items": [
+        {"supplier_id": "SUP-08", "unit_cost": 1.10, "moq": 240, "case_pack": 24, "lead_time_days": 6, "available_qty": 4000},
+        {"supplier_id": "SUP-09", "unit_cost": 1.20, "moq": 48, "case_pack": 24, "lead_time_days": 2, "available_qty": 600}
+      ],
+      "inventory": {"on_hand": 260, "reserved": 10, "last_counted_days_ago": 2},
+      "forecast": 30,
+      "sales": {"base": 30, "noise": 2, "units_per_order": 2.0, "recent": [58, 63, 67, 72, 76, 80, 84]},
+      "budget": {"limit": 6000, "committed": 330},
+      "storage": {"capacity": 1800, "other_units": 600},
+      "open_pos": [
+        {"po_id": "PO-3001", "supplier_id": "SUP-08", "quantity": 288, "confirmed_qty": 288, "status": "confirmed", "arrives_in_days": 5}
+      ]
+    },
+    {
+      "case": {
+        "case_id": "DEMAND-302",
+        "case_type": "demand_change",
+        "title": "Sales jump on Paper Plates 50 pack",
+        "description": "The weekly sales report shows Paper Plates 50 pack at MEX-02 selling well above forecast over the last 7 days. PO-3021 is already open. Check whether the current purchasing plan still covers demand and change it if needed.",
+        "ref_po_id": "PO-3021"
+      },
+      "node_id": "MEX-02",
+      "product": {"sku": "PLATES-50", "name": "Paper Plates 50 pack", "category": "Household", "shelf_life_days": 1095, "safety_days": 3, "primary_supplier_id": "SUP-10"},
+      "supplier_items": [
+        {"supplier_id": "SUP-10", "unit_cost": 2.40, "moq": 100, "case_pack": 25, "lead_time_days": 4, "available_qty": 3000}
+      ],
+      "inventory": {"on_hand": 500, "reserved": 0, "last_counted_days_ago": 3},
+      "forecast": 40,
+      "sales": {"base": 40, "noise": 2, "units_per_order": 2.0, "recent": [38, 41, 39, 420, 40, 42, 37], "recent_orders": [19, 21, 20, 22, 20, 21, 19]},
+      "budget": {"limit": 5000, "committed": 480},
+      "storage": {"capacity": 2000, "other_units": 900},
+      "open_pos": [
+        {"po_id": "PO-3021", "supplier_id": "SUP-10", "quantity": 200, "confirmed_qty": 200, "status": "confirmed", "arrives_in_days": 4}
+      ]
+    },
+    {
+      "case": {
+        "case_id": "CONSTRAINT-401",
+        "case_type": "purchase_constraint",
+        "title": "Replenish Diapers Size M under budget and storage limits",
+        "description": "The replenishment engine recommends purchasing 900 units of Diapers Size M 60 pack for SAO-03 from BabyCare Atacado. The Baby Care budget and storage zone are both tight this period. Decide what should actually be purchased.",
+        "recommended_qty": 900,
+        "recommended_supplier_id": "SUP-11"
+      },
+      "node_id": "SAO-03",
+      "product": {"sku": "DIAPER-M", "name": "Diapers Size M 60 pack", "category": "Baby Care", "shelf_life_days": 1095, "safety_days": 3, "primary_supplier_id": "SUP-11"},
+      "supplier_items": [
+        {"supplier_id": "SUP-11", "unit_cost": 18.00, "moq": 120, "case_pack": 6, "lead_time_days": 5, "available_qty": 3000},
+        {"supplier_id": "SUP-12", "unit_cost": 19.50, "moq": 60, "case_pack": 6, "lead_time_days": 3, "available_qty": 1000}
+      ],
+      "inventory": {"on_hand": 450, "reserved": 0, "last_counted_days_ago": 2},
+      "forecast": 70,
+      "sales": {"base": 70, "noise": 3, "units_per_order": 1.1},
+      "budget": {"limit": 25000, "committed": 18000},
+      "storage": {"capacity": 1500, "other_units": 800},
+      "open_pos": []
+    },
+    {
+      "case": {
+        "case_id": "CONSTRAINT-402",
+        "case_type": "purchase_constraint",
+        "title": "Replenish Organic Honey 500g below supplier minimum",
+        "description": "The replenishment engine recommends purchasing 300 units (the supplier minimum) of Organic Honey 500g for MEX-02 from Miel de los Altos. The Pantry budget for MEX-02 is nearly used up. Decide what should actually be purchased.",
+        "recommended_qty": 300,
+        "recommended_supplier_id": "SUP-13"
+      },
+      "node_id": "MEX-02",
+      "product": {"sku": "HONEY-500G", "name": "Organic Honey 500g", "category": "Pantry", "shelf_life_days": 730, "safety_days": 3, "primary_supplier_id": "SUP-13"},
+      "supplier_items": [
+        {"supplier_id": "SUP-13", "unit_cost": 9.00, "moq": 300, "case_pack": 12, "lead_time_days": 4, "available_qty": 2000},
+        {"supplier_id": "SUP-14", "unit_cost": 9.70, "moq": 48, "case_pack": 12, "lead_time_days": 5, "available_qty": 500}
+      ],
+      "inventory": {"on_hand": 90, "reserved": 0, "last_counted_days_ago": 4},
+      "forecast": 12,
+      "sales": {"base": 12, "noise": 1, "units_per_order": 1.0},
+      "budget": {"limit": 5000, "committed": 3500},
+      "storage": {"capacity": 800, "other_units": 400},
+      "open_pos": []
+    }
+  ]
+}
