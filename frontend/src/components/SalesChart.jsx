@@ -14,14 +14,14 @@ export default function SalesChart({ units, forecast }) {
     <svg className="chart" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-label="Daily sales for the last 28 days">
       <defs>
         <linearGradient id="sales-bar" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#c4b5fd" />
-          <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.55" />
+          <stop offset="0%" stopColor="#8b7cff" />
+          <stop offset="100%" stopColor="#5eead4" stopOpacity="0.7" />
         </linearGradient>
       </defs>
 
-      <line x1={PADDING} y1={PADDING} x2={WIDTH - PADDING} y2={PADDING} stroke="rgba(255,255,255,0.08)" />
-      <line x1={PADDING} y1={toY(maxValue / 2)} x2={WIDTH - PADDING} y2={toY(maxValue / 2)} stroke="rgba(255,255,255,0.08)" />
-      <line x1={PADDING} y1={baseline} x2={WIDTH - PADDING} y2={baseline} stroke="rgba(255,255,255,0.28)" />
+      <line x1={PADDING} y1={PADDING} x2={WIDTH - PADDING} y2={PADDING} stroke="rgba(31,36,51,0.07)" />
+      <line x1={PADDING} y1={toY(maxValue / 2)} x2={WIDTH - PADDING} y2={toY(maxValue / 2)} stroke="rgba(31,36,51,0.07)" />
+      <line x1={PADDING} y1={baseline} x2={WIDTH - PADDING} y2={baseline} stroke="rgba(31,36,51,0.22)" />
       <text x={PADDING - 6} y={PADDING + 4} textAnchor="end" className="chart-label">{maxValue}</text>
       <text x={PADDING - 6} y={baseline + 4} textAnchor="end" className="chart-label">0</text>
 
@@ -46,7 +46,7 @@ export default function SalesChart({ units, forecast }) {
             y1={toY(forecast)}
             x2={WIDTH - PADDING}
             y2={toY(forecast)}
-            stroke="#fbbf24"
+            stroke="#d97706"
             strokeWidth="2"
             strokeDasharray="6 4"
           />
