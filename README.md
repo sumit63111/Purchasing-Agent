@@ -22,9 +22,12 @@ action is checked twice: before it runs and after it lands.
 
 ![Demo: the agent working three scenarios, an approval and the evaluation scorecard](docs/demo/demo.gif)
 
-The GIF above plays on the repo page and runs at 1.6x speed. The full-quality video is
-[docs/demo/demo.mp4](docs/demo/demo.mp4). It was recorded against the running app in rules mode,
-with captions explaining each step:
+The animation above plays directly on this page at 1.35x speed. It was recorded against the
+running app in rules mode, with captions explaining each step. GitHub doesn't play video files
+stored in a repo, so the full-quality MP4 (84 s, 4 MB) is a download:
+**[Download demo.mp4](https://github.com/sumit63111/Purchasing-Agent/raw/main/docs/demo/demo.mp4)**.
+
+What the demo shows:
 
 1. **Recommendation review (REC-101):** 800 recommended, the real need is about 160, and 800 breaks
    budget and storage. The agent orders 168 and verification passes.
